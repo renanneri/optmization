@@ -14,11 +14,16 @@ class Optimization{
         double derivativeX1(double x1, double x2);
         double derivativeX2(double x1, double x2);
 
+        double hessianX1X1(double x1, double x2);
+        double hessianX1X2(double x1, double x2);
+        double hessianX2X1(double x1, double x2);
+        double hessianX2X2(double x1, double x2);
+
         double goldenSection(double x1, double x2, double eps, double p, double d1, double d2);
         double armijo();
         double gradient(double x1, double x2);
-        double newton();
-        double quasiNewton();
+        double newton(double x1, double x2);
+        double quaseNewton();
 };
 
 #endif

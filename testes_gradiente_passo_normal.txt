@@ -1,0 +1,86 @@
+(1,1)
+
+1000 iteraçoes
+
+t = 1
+
+Best x1: -0.00975287
+Best x2: 0.108131
+Iteracao: 632
+Y: 0.104058
+
+t = 0.5
+
+Best x1: -0.00235606
+Best x2: 0.0048189
+Iteracao: 345
+Y: 0.00479272
+
+t = 0.25
+
+Best x1: -8.30621e-05
+Best x2: -4.44601e-05
+Iteracao: 783
+Y: 0.000139529
+
+t = 0.125
+
+Best x1: -2.94634e-05
+Best x2: 0.000197288
+Iteracao: 822
+Y: 0.000186671
+
+10.000 iteraçoes
+
+t = 1
+
+Best x1: -0.00223505
+Best x2: -0.0345681
+Iteracao: 7813
+Y: 0.0358079
+
+t = 0.5
+
+Best x1: -0.00141463
+Best x2: 0.00182487
+Iteracao: 3850
+Y: 0.00217968
+
+t = 0.25
+
+Best x1: 3.65902e-05
+Best x2: 9.5206e-06
+Iteracao: 5851
+Y: 5.58273e-05
+
+t = 0.125
+
+Best x1: 1.02504e-06
+Best x2: 4.77805e-07
+Iteracao: 5532
+Y: 1.67913e-06
+
+Atualiza
+Best x1: 0.438049
+Best x2: 0.157073
+Iteracao: 1
+
+Atualiza
+Best x1: 0.0884833
+Best x2: 0.274905
+Iteracao: 3
+
+Atualiza
+Best x1: -0.0868244
+Best x2: 0.108462
+Iteracao: 5
+
+Atualiza
+Best x1: -0.0648677
+Best x2: 0.104821
+Iteracao: 588
+
+Atualiza
+Best x1: -0.00975287
+Best x2: 0.108131
+Iteracao: 632
