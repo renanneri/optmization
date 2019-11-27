@@ -212,7 +212,73 @@ double Optimization::newton(double x1, double x2){
   bestX1 = x1;
   bestX2 = x2;
   int it = 0;
+  double t;
+  double* d;
 
   while (gradX1 != 0 && gradX2 != 0){
+
+    t = 1;// goldenSection(x1, x2, 0.000001, 0.000001, d1, d2);
+    d = dnewton(x1,x2,gradX1,gradX2);
+    x1 = x1 + t*d[0];
+    x2 = x2 + t*d[1];
+    k++;
+    if(function(bestX1,bestX2) == function(x1,x2)){
+      cout << "Igual " << endl;
+      cout << "Iteracao: " << k << endl; 
+    }
+    if(function(bestX1,bestX2) > function(x1,x2) ){
+      cout << "Atualiza" << endl;
+      bestX1 = x1;
+      bestX2 = x2;
+      cout << "Best x1: " << bestX1 << endl << "Best x2: " << bestX2 << endl;
+      it = k;
+      cout << "Iteracao: " << it << endl << endl;;
+    }
+    //cout << k << endl;
+    //cout << "x1 " << x1 << endl;
+    //cout << "x2 " << x2 << endl;
+    //cout << "Y: " << function(x1,x2) << endl;
+    gradX1 = derivativeX1(x1, x2);
+    gradX2 = derivativeX2(x1, x2);
+  }
+
+  cout << endl << "Best x1: " << bestX1 << endl << "Best x2: " << bestX2 << endl;
+  cout << "Iteracao: " << it << endl;
+  cout << "Y: " << function(bestX1,bestX2) << endl;
+};
+
+
+double* Optimization::dnewton(double x1, double x2,double gradX1, double gradX2){
+  double x1x2 = hessianX1X2(x1,x2);
+  double x1x1 = hessianX1X1(x1,x2);
+  double x2x2 = hessianX2X2(x1,x2);
+  double x2x1 = hessianX2X1(x1,x2);
+
+  double hessian[2][2] = {{x1x1,x1x2},{x2x1,x2x2}};
+
+  double detHessian = hessian[0][0]*hessian[1][1] - (hessian[1][0]*hessian[0][1]);
+
+  double inv_hessian[2][2] = {{hessian[1][1]/detHessian,-hessian[0][1]/detHessian},{-hessian[1][0]/detHessian, hessian[0][0]/detHessian}};
+
+  double gradient[2] = {derivativeX1(x1,x2) ,derivativeX2(x1,x2)};
+
+  double d[2] = {-(hessian[0][0]*gradX1 + hessian[1][0]*gradX2),-(hessian[1][0]*gradX1 + hessian[1][1]*gradX2)};
+  
+  return d;
+}
+
+double Optimization::quaseNewton(double x1, double x2){
+
+}
+
+double Optimization::BFGS(double x1, double x2){
+
+}
+
+
+double* Optimization::p(double x1,double x2,double x1_1, double x2_1){
+}
+
+double* Optimization::q(double x1,double x2,double x1_1, double x2_1){
 
 }

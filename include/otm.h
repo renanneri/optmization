@@ -23,7 +23,11 @@ class Optimization{
         double armijo();
         double gradient(double x1, double x2);
         double newton(double x1, double x2);
-        double quaseNewton();
+        double* dnewton(double x1, double x2,double gradX1, double gradX2);
+        double quaseNewton(double x1, double x2);
+
+        double* p(double x1,double x2,double x1_1, double x2_1);
+        double* q(double x1,double x2,double x1_1, double x2_1);
 };
 
 #endif
