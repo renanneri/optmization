@@ -10,8 +10,7 @@ int main()
     Optimization opt = Optimization();
     // opt.derivativeX1(1,1);
     // opt.derivativeX2(1,1);
-    cout << "Newton: " << endl;
-    opt.newton(1, 1);
-    cout << "Quase Newton: " << endl;
+    cout << " Quasi-Newton: " << endl;
+    opt.quasiNewton(1, 1);
     return 0;
 }
