@@ -20,7 +20,7 @@ class Optimization{
         double hessianX2X2(double x1, double x2);
 
         double goldenSection(double x1, double x2, double eps, double p, double d1, double d2);
-        double armijo();
+        double armijo(double x1, double x2, double d1, double d2, double gama=0.8, double eta=0.25);
         double gradient(double x1, double x2);
         double newton(double x1, double x2);
         double* dnewton(double x1, double x2,double gradX1, double gradX2);

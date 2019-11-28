@@ -100,7 +100,7 @@ double Optimization::hessianX2X2(double x1, double x2){
 
 double Optimization::goldenSection(double x1, double x2, double eps, double p, double d1, double d2)
 {
-  double theta1 = (3 - sqrt(5))/2;
+  double theta1 = (3 - sqrt(5))/2.0;
   double theta2 = 1 - theta1;
 
   // Obtenção do intervalo [a, b]
@@ -108,26 +108,27 @@ double Optimization::goldenSection(double x1, double x2, double eps, double p, d
   double s = p;
   double b = 2*p;
 
-  cout << "func " << function(0.32, 1.28) << endl;
+  // cout << "func " << derivativeX1(x1,x2)*d1 + derivativeX2(x1, x2)*d2 << endl;
 
 
-  while (phi(x1, x2, d1, d2, b) < phi(x1, x2, d1, d2, s)){
+  while (function(x1+b*d1, x2+b*d2) < function(x1+s*d1, x2+s*d2)){
     a = s;
     s = b;
     b = 2*b;
-    cout << "f: " << function(x1, x2) << endl;
-    cout << "phi1: " << phi(x1, x2, d1, d2, b) << endl;
-    cout << "phi2: " << phi(x1, x2, d1, d2, s) << endl;
-    cout << "a:" << a << " s:" << s << " b:" << b << endl;
+    // cout << "f: " << function(x1, x2) << endl;
+    // cout << "phi1: " << phi(x1, x2, d1, d2, b) << endl;
+    // cout << "phi2: " << phi(x1, x2, d1, d2, s) << endl;
+    // cout << "a:" << a << " s:" << s << " b:" << b << endl;
   }
 
   // Obtenção de t*
   double u = a + theta1*(b - a);
   double v = a + theta2*(b - a);
   int cont = 0;
-  while ((b - a) > eps){
-    if (cont > 1000) break;
-    if (phi(x1, x2, d1, d2, u) < phi(x1, x2, d1, d2, v)){
+  while (abs(b - a) > eps){
+    // cout << "b - a: " << b-a << endl;
+    // if (cont > 1000) break;
+    if (function(x1+u*d1, x2+u*d2) < function(x1+v*d1, x2+v*d2)){
       b = v;
       v = u;
       u = a + theta1*(b - a);
@@ -139,7 +140,29 @@ double Optimization::goldenSection(double x1, double x2, double eps, double p, d
     cont++;
   }
 
+  // cout << endl << "t: " << (u+v)/2 << endl;
   return (u + v)/2;
+}
+
+double Optimization::armijo(double x1, double x2, double d1, double d2, double gama, double eta)
+{
+  double t = 1;
+  double functionStep = function(x1 + t*d1, x2 + t*d2);
+  double functionImage = function(x1, x2);
+  double regularizer = eta*t*(derivativeX1(x1, x2)*d1 + derivativeX2(x1, x2)*d2);
+
+  // cout << endl << "func step: " << functionStep << endl << "func image: " << functionImage << endl << "reg: " << regularizer << endl; 
+
+  while (functionStep > functionImage + regularizer){
+    t = gama*t;
+    functionStep = function(x1 + t*d1, x2 + t*d2);
+    regularizer = eta*t*(derivativeX1(x1, x2)*d1 + derivativeX2(x1, x2)*d2);
+
+    // cout << endl << "regularizer: " << regularizer << endl;
+
+  }
+
+  return t;
 }
 
 double Optimization::gradient(double x1, double x2){
@@ -159,40 +182,45 @@ double Optimization::gradient(double x1, double x2){
   bestX1 = x1;
   bestX2 = x2;
   int it = 0;
+  double tolerance = 0.001;
 
-  while (gradX1 != 0 && gradX2 != 0){
-    if (k == 1000) break;
+
+  while (abs(gradX1) >= tolerance && abs(gradX2) >= tolerance){
+    // if (k == 5) break;
     //cout << "gradx1: " << gradX1 << endl;
     //cout << "gradx2: " << gradX2 << endl << endl;
     d1 = -gradX1;
     d2 = -gradX2;
-    t = 1;// goldenSection(x1, x2, 0.000001, 0.000001, d1, d2);
+    t = goldenSection(x1, x2, 0.001, 0.2, d1, d2);//armijo(x1, x2, d1, d2);//  0.1;// 
+    // cout << endl << "t: " << t << endl;
     x1 = x1 + t*d1;
     x2 = x2 + t*d2;
     k++;
-    if(function(bestX1,bestX2) == function(x1,x2)){
-      cout << "Igual " << endl;
-      cout << "Iteracao: " << k << endl; 
-    }
-    if(function(bestX1,bestX2) > function(x1,x2) ){
-      cout << "Atualiza" << endl;
-      bestX1 = x1;
-      bestX2 = x2;
-      cout << "Best x1: " << bestX1 << endl << "Best x2: " << bestX2 << endl;
-      it = k;
-      cout << "Iteracao: " << it << endl << endl;;
-    }
+    // if(function(bestX1,bestX2) == function(x1,x2)){
+    //   cout << "Igual " << endl;
+    //   cout << "Iteracao: " << k << endl; 
+    // }
+    // if(function(bestX1,bestX2) > function(x1,x2) ){
+    //   cout << "Atualiza" << endl;
+    //   bestX1 = x1;
+    //   bestX2 = x2;
+    //   cout << "Best x1: " << bestX1 << endl << "Best x2: " << bestX2 << endl;
+    //   it = k;
+    //   cout << "Iteracao: " << it << endl << endl;;
+    // }
     //cout << k << endl;
     //cout << "x1 " << x1 << endl;
     //cout << "x2 " << x2 << endl;
     //cout << "Y: " << function(x1,x2) << endl;
     gradX1 = derivativeX1(x1, x2);
     gradX2 = derivativeX2(x1, x2);
+
+    // cout << endl << "Grad x1: " << gradX1 << endl << "Grad x2: " << gradX2 << endl;
   }
 
-  cout << endl << "Best x1: " << bestX1 << endl << "Best x2: " << bestX2 << endl;
-  cout << "Iteracao: " << it << endl;
-  cout << "Y: " << function(bestX1,bestX2) << endl;
+  cout << endl << "Best x1: " << x1 << endl << "Best x2: " << x2 << endl;
+  cout << "Iteracao: " << k << endl;
+  cout << "Y: " << function(x1,x2) << endl;
 }
 
 double Optimization::newton(double x1, double x2){
@@ -212,7 +240,7 @@ double Optimization::newton(double x1, double x2){
   bestX1 = x1;
   bestX2 = x2;
   int it = 0;
-  double t;
+  // double t;
   double* d;
 
   while (gradX1 != 0 && gradX2 != 0){
@@ -271,9 +299,9 @@ double Optimization::quaseNewton(double x1, double x2){
 
 }
 
-double Optimization::BFGS(double x1, double x2){
+// double Optimization::BFGS(double x1, double x2){
 
-}
+// }
 
 
 double* Optimization::p(double x1,double x2,double x1_1, double x2_1){
