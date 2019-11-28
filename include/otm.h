@@ -2,6 +2,7 @@
 #define OTM_H_
 #include <stdio.h>
 #include <math.h>
+#include <vector>
 
 class Optimization{
     public:
@@ -23,11 +24,12 @@ class Optimization{
         double armijo();
         double gradient(double x1, double x2);
         double newton(double x1, double x2);
-        double* dnewton(double x1, double x2,double gradX1, double gradX2);
+        vector<double> dnewton(double x1, double x2,double gradX1, double gradX2);
         double quaseNewton(double x1, double x2);
+        vector<vector<double>> BFGS(vector<vector<double>> H, double x1,double x2,double x1_1, double x2_1);
 
-        double* p(double x1,double x2,double x1_1, double x2_1);
-        double* q(double x1,double x2,double x1_1, double x2_1);
+        vector<double> p(double x1,double x2,double x1_1, double x2_1);
+        vector<double> q(double x1,double x2,double x1_1, double x2_1);
 };
 
 #endif
