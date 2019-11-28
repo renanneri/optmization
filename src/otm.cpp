@@ -322,7 +322,7 @@ vector<vector<double>> Optimization::BFGS(vector<vector<double>> H, double x1,do
   double dividend = pk[0]*qk[0] + pk[1]*qk[1];
 
 
-  double parantheses = 1 + (H[0][0]*qk[0]*qk[0] + H[1][0]*qk[0]*qk[1] + H[0][1]*qk[0]*qk[1] + H[1][1]*qk[1]*qk[1])/dividend;
+  double parantheses = 1 + (H[0][0]*qk[0]*qk[0] + H[1][0]*qk[0]*qk[0] + H[0][1]*qk[1]*qk[1] + H[1][1]*qk[1]*qk[1])/dividend;
 
 
   secondpart[0][0] = (parantheses/dividend)*(pk[0]*pk[0]);
