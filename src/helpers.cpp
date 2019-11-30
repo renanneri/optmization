@@ -119,32 +119,21 @@ vector<double> q(double x1,double x2,double x1_1, double x2_1){
   return q;
 }
 
-vector<vector<double> > BFGS(vector<vector<double> > H, double x1,double x2,double x1_1, double x2_1){
+vector<vector<double>> BFGS(vector<vector<double>> H, double x1,double x2,double x1_1, double x2_1){
   // Hk+1 = firstpart + secondpart + thirdpart
   // firstpart = Hk
 
-  vector<vector<double> > secondpart(2,vector<double>(2, 0));
-  vector<vector<double> > thirdpart(2,vector<double>(2, 0));
-  vector<vector<double> > result(2,vector<double>(2, 0));
+  vector<vector<double>> secondpart(2,vector<double>(2, 0));
+  vector<vector<double>> thirdpart(2,vector<double>(2, 0));
+  vector<vector<double>> result(2,vector<double>(2, 0));
 
-  cout << H[0][0] << H[0][1] << H[1][0] << H[1][1] << endl;
-  
   vector<double> pk = p(x1,x2,x1_1,x2_1);
   vector<double> qk = q(x1,x2,x1_1,x2_1);
 
   double dividend = pk[0]*qk[0] + pk[1]*qk[1];
 
-  cout << endl << "old x1: " << x1 << endl;
-  cout << endl << "old x2: " << x2 << endl;
-  cout << endl << "x1: " << x1_1 << endl;
-  cout << endl << "x2: " << x2_1 << endl;
-  cout << endl << "pk: " << pk[0] << pk[1] << endl;
-  cout << endl << "qk: " << qk[0] << qk[1] << endl;
-  cout << endl << "dividend: " << dividend << endl;
-
-
   // double parantheses = 1 + (H[0][0]*qk[0]*qk[0] + H[1][0]*qk[0]*qk[0] + H[0][1]*qk[1]*qk[1] + H[1][1]*qk[1]*qk[1])/dividend;
-  double parantheses = 1 + ((qk[0] * H[0][0] + qk[1] * H[1][0]) * qk[0] + (qk[0] * H[0][1] + qk[1] * H[1][1])*qk[1]);
+  double parantheses = 1 + ((qk[0] * H[0][0] + qk[1] * H[1][0]) * qk[0] + (qk[0] * H[0][1] + qk[1] * H[1][1])*qk[1])/dividend;
 
   secondpart[0][0] = (parantheses/dividend)*(pk[0]*pk[0]);
   secondpart[0][1] = (parantheses/dividend)*(pk[0]*pk[1]);
@@ -162,8 +151,23 @@ vector<vector<double> > BFGS(vector<vector<double> > H, double x1,double x2,doub
   result[0][1] = H[0][1] + secondpart[0][1] - thirdpart[0][1];
   result[1][0] = H[1][0] + secondpart[1][0] - thirdpart[1][0];
   result[1][1] = H[1][1] + secondpart[1][1] - thirdpart[1][1];
+
+  return result;
+}
+
+vector<vector<double>> inverse(vector<vector<double>> H){
+
+  vector<vector<double>> result(2,vector<double>(2, 0));
+  
+  double det = H[0][0]*H[1][1] - H[1][0]*H[0][1];
+
+  result[0][0] = H[1][1]/det;
+  result[0][1] = 0 - H[0][1]/det;
+  result[1][0] = 0 - H[1][0]/det;
+  result[1][1] = H[0][0]/det;
   
   return result;
+
 }
 
 

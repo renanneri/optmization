@@ -20,6 +20,8 @@ double hessianX2X2(double x1, double x2);
 vector<double> dnewton(double x1, double x2,double gradX1, double gradX2);
 vector<vector<double> > BFGS(vector<vector<double> > H, double x1,double x2,double x1_1, double x2_1);
 
+vector<vector<double>> inverse(vector<vector<double> > H);
+
 vector<double> p(double x1,double x2,double x1_1, double x2_1);
 vector<double> q(double x1,double x2,double x1_1, double x2_1);
 

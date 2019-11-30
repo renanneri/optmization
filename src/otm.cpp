@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <math.h> 
+#include <string>
 #include <vector>
 #include "otm.h"
 #include "helpers.h"
@@ -133,6 +134,7 @@ double Optimization::newton(double x1, double x2){
   bestX2 = x2;
   int it = 0;
   vector<double> d;
+  double tolerance = 0.001;
 
   while (gradX1 != 0 && gradX2 != 0){
     if (k == 100) break;
@@ -159,38 +161,34 @@ double Optimization::newton(double x1, double x2){
 double Optimization::quasiNewton(double x1, double x2){
   int k = 0;
   double d1, d2, t, old_x1, old_x2;
-  vector<vector<double> > H = { { 1, 0}, { 0, 1}};
+  vector<vector<double>> H = { { 1, 0}, { 0, 1}};
+  vector<vector<double>> invH = { { 1, 0}, { 0, 1}};
   double gradX1 = derivativeX1(x1, x2);
   double gradX2 = derivativeX2(x1, x2);
-
   double bestX1, bestX2;
-
-  // cout << H[0][0] << H[0][1] << H[1][0] << H[1][1] << endl;
 
   bestX1 = x1;
   bestX2 = x2;
   int it = 0;
 
-  double tolerance = 0.01;
+  double tolerance = 0.001;
 
-  while (gradX1 > tolerance && gradX2 > tolerance){
-    if (k == 10) break;
-    t = 0.2; //armijo(x1, x2, d1, d2);
+  while (gradX1 != 0 && gradX2 != 0){
+    if (k == 100) break;
 
-    d1 = - (H[0][0]*gradX1 + H[0][1]*gradX2);
-    d2 = - (H[1][0]*gradX1 + H[1][1]*gradX2);
+    t = 0.1; //armijo(x1, x2, d1, d2);
+
+    d1 = - (invH[0][0]*gradX1 + invH[0][1]*gradX2);
+    d2 = - (invH[1][0]*gradX1 + invH[1][1]*gradX2);
     
-    cout << "x1: " << x1 << "   x2: " << x2 << endl;
-    cout << "D1: " << d1 << "   D2: " << d2 << endl;
-    cout << "t: " << t << endl;
-    cout << "gradx1: " << gradX1 << "   gradx2: " << gradX2 << endl << endl << endl;
-
     old_x1 = x1;
     old_x2 = x2;
 
     x1 = x1 + t*d1;
     x2 = x2 + t*d2;
+
     H = BFGS(H,old_x1,old_x2,x1,x2);
+    invH = inverse(H);
     k++;
     if(function(bestX1,bestX2) > function(x1,x2) ){
 
@@ -202,6 +200,12 @@ double Optimization::quasiNewton(double x1, double x2){
     }
     gradX1 = derivativeX1(x1, x2);
     gradX2 = derivativeX2(x1, x2);
+
+    cout << "k: " << k << endl;
+    cout << "x1: " << x1 << "   x2: " << x2 << endl;
+    cout << "D1: " << d1 << "   D2: " << d2 << endl;
+    //cout << "t: " << t << endl;
+    cout << "gradx1: " << gradX1 << "   gradx2: " << gradX2 << endl << endl << endl;
     // cout << H[0][0] << H[0][1] << H[1][0] << H[1][1] << endl;
 
   }
