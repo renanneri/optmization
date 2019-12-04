@@ -85,38 +85,48 @@ double Optimization::armijo(double x1, double x2, double d1, double d2, double g
 
 double Optimization::gradient(double x1, double x2){
   int k = 0;
-  double d1, d2, t;
+  double d1, d2, t, old_x1, old_x2;
   double gradX1 = derivativeX1(x1, x2);
   double gradX2 = derivativeX2(x1, x2);
-
-  cout << endl << "Gradx1: " << gradX1 << endl << "Gradx2: " << gradX2 << endl;
 
   double bestX1, bestX2;
 
   bestX1 = x1;
   bestX2 = x2;
   int it = 0;
-  double tolerance = 0.001;
+  double tolerance = 0.0001;
 
-  while (abs(gradX1) > tolerance || abs(gradX2) > tolerance){
-    // if (k == 1000) break;
+  while (true){
     d1 = -gradX1;
     d2 = -gradX2;
     t = armijo(x1,x2,d1,d2);//0.1;
+
+    old_x1 = x1;
+    old_x2 = x2;
     x1 = x1 + t*d1;
     x2 = x2 + t*d2;
-    k++;
 
-    if(function(bestX1,bestX2) > function(x1,x2) ){
-      bestX1 = x1;
-      bestX2 = x2;
-      it = k;
+    if (x1 < 0 && x2 > 0){
+      x1 = x1 + 0.5;
+      x2 = x2 - 0.5;
+    } else if (x1 > 0 && x2 < 0){
+      x1 = x1 - 0.5;
+      x2 = x2 + 0.5;
     }
+    k++;
+    cout << endl << "Gradx1: " << gradX1 << endl << "Gradx2: " << gradX2 << endl << "t: " << t << endl;
+    cout << "x1, x2: " << x1 << " " << x2 << endl;
+
+    if (abs(x1 - old_x1) < tolerance && abs(x2 - old_x2) < tolerance) break;
+
+    // if(function(bestX1,bestX2) > function(x1,x2) ){
+    //   bestX1 = x1;
+    //   bestX2 = x2;
+    //   it = k;
+    // }
 
     gradX1 = derivativeX1(x1, x2);
     gradX2 = derivativeX2(x1, x2);
-
-    // cout << endl << "Grad x1: " << gradX1 << endl << "Grad x2: " << gradX2 << endl;
   }
 
   cout << "Best x: " << x1 << endl << "Best y: " << x2 << endl << "Interacao: " << k << endl;
