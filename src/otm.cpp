@@ -134,7 +134,7 @@ double Optimization::gradient(double x1, double x2){
 
 double Optimization::newton(double x1, double x2){
   int k = 0;
-  double d1, d2, t;
+  double d1, d2, t, old_x1, old_x2;
   double gradX1 = derivativeX1(x1, x2);
   double gradX2 = derivativeX2(x1, x2);
 
@@ -144,28 +144,47 @@ double Optimization::newton(double x1, double x2){
   bestX2 = x2;
   int it = 0;
   vector<double> d;
-  double tolerance = 0.001;
+  double tolerance = 0.0001;
 
-  while (gradX1 != 0 && gradX2 != 0){
-    if (k == 100) break;
-    t = 1;
+  cout << "x1: " << x1 << "   x2: " << x2 << endl;
+  cout << "gradx1: " << gradX1 << endl;
+  cout << "gradx2: " << gradX2 << endl << endl << endl;
+
+  while (true){
+    // if (k == 100) break;
     d = dnewton(x1,x2,gradX1,gradX2);
-    cout << "x1: " << x1 << "   x2: " << x2 << endl;
-    cout << "D1: " << d[0] << "   D2: " << d[1] << endl;
-    cout << "gradx1: " << gradX1 << endl;
-    cout << "gradx2: " << gradX2 << endl << endl << endl;
+    t = armijo(x1, x2, d[0], d[1]);
+    old_x1 = x1;
+    old_x2 = x2;
     x1 = x1 + t*d[0];
     x2 = x2 + t*d[1];
+    cout << "x1: " << x1 << "   x2: " << x2 << endl;
+    cout << "D1: " << d[0] << "   D2: " << d[1] << endl;
+    cout << "t: " << t << endl;
+    cout << "gradx1: " << gradX1 << endl;
+    cout << "gradx2: " << gradX2 << endl << endl << endl;
     k++;
-    if(function(bestX1,bestX2) > function(x1,x2) ){
-      bestX1 = x1;
-      bestX2 = x2;
-      it = k;
+
+    if (x1 < 0 && x2 > 0){
+      x1 = x1 + 0.1;
+      x2 = x2 - 0.1;
+    } else if (x1 > 0 && x2 < 0){
+      x1 = x1 - 0.1;
+      x2 = x2 + 0.1;
     }
+
+    // if(function(bestX1,bestX2) > function(x1,x2) ){
+    //   bestX1 = x1;
+    //   bestX2 = x2;
+    //   it = k;
+    // }
+
+    if (abs(x1 - old_x1) < tolerance && abs(x2 - old_x2) < tolerance) break;
     gradX1 = derivativeX1(x1, x2);
     gradX2 = derivativeX2(x1, x2);
   }
-    cout << "Best x: " << bestX1 << endl << "Best y: " << bestX2 << endl << "Interacao: " << it << endl;
+
+  cout << "Best x: " << x1 << endl << "Best y: " << x2 << endl << "Interacao: " << k << endl;
 };
 
 double Optimization::quasiNewton(double x1, double x2){
@@ -183,13 +202,12 @@ double Optimization::quasiNewton(double x1, double x2){
 
   double tolerance = 0.001;
 
-  while (gradX1 != 0 && gradX2 != 0){
-    if (k == 100) break;
-
-    t = 0.1; //armijo(x1, x2, d1, d2);
-
+  while (true){
+    // if (k == 100) break;
     d1 = - (invH[0][0]*gradX1 + invH[0][1]*gradX2);
     d2 = - (invH[1][0]*gradX1 + invH[1][1]*gradX2);
+    t = armijo(x1, x2, d1, d2);
+
     
     old_x1 = x1;
     old_x2 = x2;
@@ -200,25 +218,27 @@ double Optimization::quasiNewton(double x1, double x2){
     H = BFGS(H,old_x1,old_x2,x1,x2);
     invH = inverse(H);
     k++;
-    if(function(bestX1,bestX2) > function(x1,x2) ){
 
-      bestX1 = x1;
-      bestX2 = x2;
+    if (abs(x1 - old_x1) < tolerance && abs(x2 - old_x2) < tolerance) break;
+    // if(function(bestX1,bestX2) > function(x1,x2) ){
+
+    //   bestX1 = x1;
+    //   bestX2 = x2;
       
-      it = k;
+    //   it = k;
 
-    }
+    // }
     gradX1 = derivativeX1(x1, x2);
     gradX2 = derivativeX2(x1, x2);
 
     cout << "k: " << k << endl;
     cout << "x1: " << x1 << "   x2: " << x2 << endl;
     cout << "D1: " << d1 << "   D2: " << d2 << endl;
-    //cout << "t: " << t << endl;
+    cout << "t: " << t << endl;
     cout << "gradx1: " << gradX1 << "   gradx2: " << gradX2 << endl << endl << endl;
     // cout << H[0][0] << H[0][1] << H[1][0] << H[1][1] << endl;
 
   }
-  cout << "Best x: " << bestX1 << endl << "Best y: " << bestX2 << endl << "Interacao: " << it << endl;
+  cout << "Best x: " << x1 << endl << "Best y: " << x2 << endl << "Interacao: " << k << endl;
 }
 

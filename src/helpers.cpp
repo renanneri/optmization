@@ -104,7 +104,7 @@ vector<double> dnewton(double x1, double x2,double gradX1, double gradX2){
 
   double gradient[2] = {derivativeX1(x1,x2) ,derivativeX2(x1,x2)};
 
-  vector<double> d = {-(inv_hessian[0][0]*gradX1 + inv_hessian[1][0]*gradX2),-(inv_hessian[1][0]*gradX1 + inv_hessian[1][1]*gradX2)};
+  vector<double> d = {-(inv_hessian[0][0]*gradX1 + inv_hessian[0][1]*gradX2),-(inv_hessian[1][0]*gradX1 + inv_hessian[1][1]*gradX2)};
   
   return d;
 }
@@ -123,6 +123,8 @@ vector<vector<double>> BFGS(vector<vector<double>> H, double x1,double x2,double
   // Hk+1 = firstpart + secondpart + thirdpart
   // firstpart = Hk
 
+  double tolerance = 0.00001;
+
   vector<vector<double>> secondpart(2,vector<double>(2, 0));
   vector<vector<double>> thirdpart(2,vector<double>(2, 0));
   vector<vector<double>> result(2,vector<double>(2, 0));
@@ -132,6 +134,10 @@ vector<vector<double>> BFGS(vector<vector<double>> H, double x1,double x2,double
 
   double dividend = pk[0]*qk[0] + pk[1]*qk[1];
 
+  if (dividend < tolerance) {
+    return H;
+  }
+
   // double parantheses = 1 + (H[0][0]*qk[0]*qk[0] + H[1][0]*qk[0]*qk[0] + H[0][1]*qk[1]*qk[1] + H[1][1]*qk[1]*qk[1])/dividend;
   double parantheses = 1 + ((qk[0] * H[0][0] + qk[1] * H[1][0]) * qk[0] + (qk[0] * H[0][1] + qk[1] * H[1][1])*qk[1])/dividend;
 
@@ -140,7 +146,7 @@ vector<vector<double>> BFGS(vector<vector<double>> H, double x1,double x2,double
   secondpart[1][0] = (parantheses/dividend)*(pk[1]*pk[0]);
   secondpart[1][1] = (parantheses/dividend)*(pk[1]*pk[1]);
 
-
+  cout << "dividend: " << dividend << endl;
   thirdpart[0][0] = (pk[0]*qk[0]*H[0][0] + pk[0]*qk[1]*H[1][0] + (H[0][0]*qk[0] + H[0][1]*qk[1])*pk[0])/dividend;
   thirdpart[0][1] = (pk[0]*qk[0]*H[0][1] + pk[0]*qk[1]*H[1][1] + (H[0][0]*qk[0] + H[0][1]*qk[1])*pk[1])/dividend;
   thirdpart[1][0] = (pk[1]*qk[0]*H[0][0] + pk[1]*qk[1]*H[1][0] + (H[1][0]*qk[0] + H[1][1]*qk[1])*pk[0])/dividend;
