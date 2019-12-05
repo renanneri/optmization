@@ -203,10 +203,10 @@ double Optimization::quasiNewton(double x1, double x2){
   double tolerance = 0.001;
 
   while (true){
-    // if (k == 100) break;
+    // if (k == 10) break;
     d1 = - (invH[0][0]*gradX1 + invH[0][1]*gradX2);
     d2 = - (invH[1][0]*gradX1 + invH[1][1]*gradX2);
-    t = armijo(x1, x2, d1, d2);
+    t = goldenSection(x1, x2, 0.001, 0.001, d1, d2);//armijo(x1, x2, d1, d2);
 
     
     old_x1 = x1;
@@ -218,24 +218,23 @@ double Optimization::quasiNewton(double x1, double x2){
     H = BFGS(H,old_x1,old_x2,x1,x2);
     invH = inverse(H);
     k++;
-    if (abs(x1 - old_x1) < tolerance && abs(x2 - old_x2) < tolerance) break;
-
-    if (x1 < 0 && x2 > 0){
-      x1 = x1 + 0.05;
-      x2 = x2 - 0.05;
-    } else if (x1 > 0 && x2 < 0){
-      x1 = x1 - 0.05;
-      x2 = x2 + 0.05;
+    if (abs(x1) < 0.01 && abs(x2) < 0.2){
+      cout << "break" << endl;
+      break;
+    }
+    if (abs(x1 - old_x1) < tolerance && abs(x2 - old_x2) < tolerance){
+      cout << "break 2" << endl;
+      break;
     }
 
-    // if(function(bestX1,bestX2) > function(x1,x2) ){
+    if (x1 < 0 && x2 > 0 && (abs(x1) + abs(x2)) > 1.5){
+      x1 = x1 + 0.5;
+      x2 = x2 - 0.5;
+    } else if (x1 > 0 && x2 < 0 && (abs(x1) + abs(x2)) > 1.5){
+      x1 = x1 - 0.5;
+      x2 = x2 + 0.5;
+    }
 
-    //   bestX1 = x1;
-    //   bestX2 = x2;
-      
-    //   it = k;
-
-    // }
     gradX1 = derivativeX1(x1, x2);
     gradX2 = derivativeX2(x1, x2);
 
