@@ -99,7 +99,7 @@ double Optimization::gradient(double x1, double x2){
   while (true){
     d1 = -gradX1;
     d2 = -gradX2;
-    t = armijo(x1,x2,d1,d2);//0.1;
+    t = goldenSection(x1, x2, 0.001, 0.001, d1, d2);//armijo(x1,x2,d1,d2);//0.1;
 
     old_x1 = x1;
     old_x2 = x2;
@@ -153,24 +153,34 @@ double Optimization::newton(double x1, double x2){
   while (true){
     // if (k == 100) break;
     d = dnewton(x1,x2,gradX1,gradX2);
-    t = armijo(x1, x2, d[0], d[1]);
+    t = goldenSection(x1, x2, 0.001, 0.001, d1, d2);//armijo(x1, x2, d[0], d[1]);//
     old_x1 = x1;
     old_x2 = x2;
     x1 = x1 + t*d[0];
     x2 = x2 + t*d[1];
-    cout << "x1: " << x1 << "   x2: " << x2 << endl;
-    cout << "D1: " << d[0] << "   D2: " << d[1] << endl;
-    cout << "t: " << t << endl;
-    cout << "gradx1: " << gradX1 << endl;
-    cout << "gradx2: " << gradX2 << endl << endl << endl;
+    // cout << "x1: " << x1 << "   x2: " << x2 << endl;
+    // cout << "D1: " << d[0] << "   D2: " << d[1] << endl;
+    // cout << "t: " << t << endl;
+    // cout << "gradx1: " << gradX1 << endl;
+    // cout << "gradx2: " << gradX2 << endl << endl << endl;
     k++;
+    if (abs(x1) < tolerance && abs(x2) < tolerance){
+      cout << "break" << endl;
+      break;
+    }
+    if (abs(x1 - old_x1) < tolerance && abs(x2 - old_x2) < tolerance){
+      cout << "break 2" << endl;
+      break;
+    }
 
-    if (x1 < 0 && x2 > 0){
-      x1 = x1 + 0.1;
-      x2 = x2 - 0.1;
-    } else if (x1 > 0 && x2 < 0){
-      x1 = x1 - 0.1;
-      x2 = x2 + 0.1;
+    if (x1 < 0 && x2 > 0 && (abs(x1) + abs(x2)) > 2){
+      cout << "pai ta aqui" << endl;
+      x1 = x1 + 0.7;
+      x2 = x2 - 0.7;
+    } else if (x1 > 0 && x2 < 0 && (abs(x1) + abs(x2)) > 2){
+      cout << "pai ta de celta" << endl;
+      x1 = x1 - 0.7;
+      x2 = x2 + 0.7;
     }
 
     // if(function(bestX1,bestX2) > function(x1,x2) ){
@@ -179,7 +189,6 @@ double Optimization::newton(double x1, double x2){
     //   it = k;
     // }
 
-    if (abs(x1 - old_x1) < tolerance && abs(x2 - old_x2) < tolerance) break;
     gradX1 = derivativeX1(x1, x2);
     gradX2 = derivativeX2(x1, x2);
   }
