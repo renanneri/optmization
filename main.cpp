@@ -19,6 +19,10 @@ int main()
     cout << "Newton: " << endl;
     // opt.quasiNewton(60, 70);
     opt.newton(1,1);
+    opt.newton(-1,1);
+    opt.newton(1,-1);
+    opt.newton(-1,-1);
+    opt.newton(-2,5);
     // opt.quasiNewton(-1, 1);
     // opt.gradient(10,-20);
     return 0;

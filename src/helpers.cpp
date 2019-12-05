@@ -59,7 +59,7 @@ double hessianX1X1(double x1, double x2){
 
   dividend2 = 4*pow(function(x1,x2) ,(3));
 
-  cout << "hessianx1x1: " << numerator1/dividend1 - numerator2/dividend2 << endl;
+  // cout << "hessianx1x1: " << numerator1/dividend1 - numerator2/dividend2 << endl;
 
   return numerator1/dividend1 - numerator2/dividend2;
 }
@@ -77,7 +77,7 @@ double hessianX1X2(double x1, double x2){
 
   dividend2 = 4*pow(function(x1,x2) ,(3));
 
-  cout << "hessianx1x2: " << numerator1/dividend1 - numerator2/dividend2 << endl;
+  // cout << "hessianx1x2: " << numerator1/dividend1 - numerator2/dividend2 << endl;
 
   return numerator1/dividend1 - numerator2/dividend2;
 }
@@ -95,7 +95,7 @@ double hessianX2X1(double x1, double x2){
 
   dividend2 = 4*pow(function(x1,x2) ,(3));
 
-  cout << "hessianx2x1: " << numerator1/dividend1 - numerator2/dividend2 << endl;
+  // cout << "hessianx2x1: " << numerator1/dividend1 - numerator2/dividend2 << endl;
 
   return numerator1/dividend1 - numerator2/dividend2;
 }
@@ -113,7 +113,7 @@ double hessianX2X2(double x1, double x2){
 
   dividend2 = 4*pow(function(x1,x2) ,(3));
 
-  cout << "hessianx2x2: " << numerator1/dividend1 - numerator2/dividend2 << endl;
+  // cout << "hessianx2x2: " << numerator1/dividend1 - numerator2/dividend2 << endl;
 
   return numerator1/dividend1 - numerator2/dividend2;
 }
