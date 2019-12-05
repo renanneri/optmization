@@ -9,6 +9,7 @@ using namespace std;
 
 double function(double x1, double x2)
 {
+  // cout << endl << "func value: " << sqrt(pow(x1,6)/6 - pow(x1,4) + 2*pow(x1,2) + x1*x2 + pow(x2,2)) << endl;
   return sqrt(pow(x1,6)/6 - pow(x1,4) + 2*pow(x1,2) + x1*x2 + pow(x2,2));
 }
 
@@ -54,9 +55,11 @@ double hessianX1X1(double x1, double x2){
 
   numerator2 = pow((pow(x1,5) - 4*pow(x1,3) + 4*x1 + x2),2);
 
-  dividend1 = 2*pow(function(x1,x2),(1/2));
+  dividend1 = 2*(function(x1,x2));
 
-  dividend2 = 4*pow(function(x1,x2) ,(3/2));
+  dividend2 = 4*pow(function(x1,x2) ,(3));
+
+  cout << "hessianx1x1: " << numerator1/dividend1 - numerator2/dividend2 << endl;
 
   return numerator1/dividend1 - numerator2/dividend2;
 }
@@ -68,11 +71,13 @@ double hessianX1X2(double x1, double x2){
 
   numerator1 = 1;
 
-  numerator2 = (pow(x1,5) - 4*pow(x1,3) + 4*x1 + x2)*(x1 + 2 + x2);
+  numerator2 = (pow(x1,5) - 4*pow(x1,3) + 4*x1 + x2)*(x1 + 2*x2);
 
-  dividend1 = 2*pow(function(x1,x2),(1/2));
+  dividend1 = 2*(function(x1,x2));
 
-  dividend2 = 4*pow(function(x1,x2) ,(3/2));
+  dividend2 = 4*pow(function(x1,x2) ,(3));
+
+  cout << "hessianx1x2: " << numerator1/dividend1 - numerator2/dividend2 << endl;
 
   return numerator1/dividend1 - numerator2/dividend2;
 }
@@ -84,11 +89,13 @@ double hessianX2X1(double x1, double x2){
   
   numerator1 = 1;
 
-  numerator2 = (pow(x1,5) - 4*pow(x1,3) + 4*x1 + x2)*(x1 + 2 + x2);
+  numerator2 = (pow(x1,5) - 4*pow(x1,3) + 4*x1 + x2)*(x1 + 2*x2);
 
-  dividend1 = 2*pow(function(x1,x2),(1/2));
+  dividend1 = 2*(function(x1,x2));
 
-  dividend2 = 4*pow(function(x1,x2) ,(3/2));
+  dividend2 = 4*pow(function(x1,x2) ,(3));
+
+  cout << "hessianx2x1: " << numerator1/dividend1 - numerator2/dividend2 << endl;
 
   return numerator1/dividend1 - numerator2/dividend2;
 }
@@ -100,11 +107,13 @@ double hessianX2X2(double x1, double x2){
 
   numerator1 = 1;
 
-  numerator2 = pow((x1 + 2 + x2),2);
+  numerator2 = pow((x1 + 2*x2),2);
 
-  dividend1 = pow(function(x1,x2),(1/2));
+  dividend1 = (function(x1,x2));
 
-  dividend2 = 4*pow(function(x1,x2) ,(3/2));
+  dividend2 = 4*pow(function(x1,x2) ,(3));
+
+  cout << "hessianx2x2: " << numerator1/dividend1 - numerator2/dividend2 << endl;
 
   return numerator1/dividend1 - numerator2/dividend2;
 }
