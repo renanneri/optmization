@@ -46,48 +46,67 @@ double derivativeX2(double x1, double x2){
 }
 
 double hessianX1X1(double x1, double x2){
-  double response;
+  double numerator1, numerator2;
 
-  double dividend;
+  double dividend1, dividend2;
 
-  dividend = pow(((x1,6) - 6*pow(x1,4) + 12*pow(x1,2) + 6*x1*x2 + 6*pow(x2,2)),(3/2)); 
+  numerator1 = 5*pow(x1,4) - 12*pow(x1,2) + 4;
 
-  response = (sqrt(3/2)*((5*pow(x1,4) - 12*pow(x1,2) + 4)*(pow(x1,6) - 6*pow(x1,4) + 12*pow(x1,2) + 6*x1*x2 + 6*pow(x2,2)) - 3*pow((pow(x1,5) - 4*pow(x1,3) + 4*x1 + x2),2)))/dividend;
+  numerator2 = pow((pow(x1,5) - 4*pow(x1,3) + 4*x1 + x2),2);
 
-  return response;
+  dividend1 = 2*pow(function(x1,x2),(1/2));
+
+  dividend2 = 4*pow(function(x1,x2) ,(3/2));
+
+  return numerator1/dividend1 - numerator2/dividend2;
 }
+
 double hessianX1X2(double x1, double x2){
-  double response;
+  double numerator1, numerator2;
 
-  double dividend;
+  double dividend1, dividend2;
 
-  dividend = pow(((x1,6) - 6*pow(x1,4) + 12*pow(x1,2) + 6*x1*x2 + 6*pow(x2,2)),(3/2));
+  numerator1 = 1;
 
-  response = (sqrt(3/2)*(-2*pow(x1,6) - 6*pow(x1,5)*x2 + 6*pow(x1,4) + 24*pow(x1,3)*x2 - 21*x1*x2 ))/dividend;
+  numerator2 = (pow(x1,5) - 4*pow(x1,3) + 4*x1 + x2)*(x1 + 2 + x2);
 
-  return response;
+  dividend1 = 2*pow(function(x1,x2),(1/2));
+
+  dividend2 = 4*pow(function(x1,x2) ,(3/2));
+
+  return numerator1/dividend1 - numerator2/dividend2;
 }
+
 double hessianX2X1(double x1, double x2){
-  double response;
+  double numerator1, numerator2;
 
-  double dividend;
+  double dividend1, dividend2;
+  
+  numerator1 = 1;
 
-  dividend = pow(((x1,6) - 6*pow(x1,4) + 12*pow(x1,2) + 6*x1*x2 + 6*pow(x2,2)),(3/2));
+  numerator2 = (pow(x1,5) - 4*pow(x1,3) + 4*x1 + x2)*(x1 + 2 + x2);
 
-  response = (sqrt(3/2)*(-2*pow(x1,6) - 6*pow(x1,5)*x2 + 6*pow(x1,4) + 24*pow(x1,3)*x2 - 21*x1*x2 ))/dividend;
+  dividend1 = 2*pow(function(x1,x2),(1/2));
 
-  return response;
+  dividend2 = 4*pow(function(x1,x2) ,(3/2));
+
+  return numerator1/dividend1 - numerator2/dividend2;
 }
+
 double hessianX2X2(double x1, double x2){
-  double response;
+  double numerator1, numerator2;
 
-  double dividend;
+  double dividend1, dividend2;
 
-  dividend = pow(((x1,6) - 6*pow(x1,4) + 12*pow(x1,2) + 6*x1*x2 + 6*pow(x2,2)),(3/2));
+  numerator1 = 1;
 
-  response = (sqrt(3/2)*(pow(x1,2)*(2*pow(x1,4) - 12*pow(x1,2) + 21)))/dividend;
+  numerator2 = pow((x1 + 2 + x2),2);
 
-  return response;
+  dividend1 = pow(function(x1,x2),(1/2));
+
+  dividend2 = 4*pow(function(x1,x2) ,(3/2));
+
+  return numerator1/dividend1 - numerator2/dividend2;
 }
 
 vector<double> dnewton(double x1, double x2,double gradX1, double gradX2){
