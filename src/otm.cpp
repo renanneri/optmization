@@ -218,8 +218,16 @@ double Optimization::quasiNewton(double x1, double x2){
     H = BFGS(H,old_x1,old_x2,x1,x2);
     invH = inverse(H);
     k++;
-
     if (abs(x1 - old_x1) < tolerance && abs(x2 - old_x2) < tolerance) break;
+
+    if (x1 < 0 && x2 > 0){
+      x1 = x1 + 0.05;
+      x2 = x2 - 0.05;
+    } else if (x1 > 0 && x2 < 0){
+      x1 = x1 - 0.05;
+      x2 = x2 + 0.05;
+    }
+
     // if(function(bestX1,bestX2) > function(x1,x2) ){
 
     //   bestX1 = x1;
